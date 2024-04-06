@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product\Product;
 use App\Http\Resources\ProductResource;
 use Validator;
+use FileUpload;
 
 class ProductsController extends Controller
 {
@@ -35,8 +36,24 @@ class ProductsController extends Controller
         if ($validator->fails()) {
             return $this->apiresponse(null, $validator->errors(), 400);
         }
+
+        // $destinationPath = 'assets/img/';
+       // $myimage = time().'.'.$request->image->getClientOriginalExtension();
+        //$request->image->move(public_path('assets/img/'), $myimage);
         
-        $product = Product::create($request->all());
+       
+    
+           
+        
+        $product = Product::create([
+
+            "name" => $request->name,
+            "price" => $request->price,
+            "description" => $request->description,
+            "quantity" => $request->quantity,
+            "image" => $request->image,
+
+        ]);
 
         if($product) {
             return $this->apiresponse(new ProductResource($product), 'Product saved', 201);
@@ -44,7 +61,7 @@ class ProductsController extends Controller
         }
 
 
-        return $this->apiresponse(null, 'Product not saved', 400);
+        //return $this->apiresponse(null, 'Product not saved', 400);
 
 
     }
